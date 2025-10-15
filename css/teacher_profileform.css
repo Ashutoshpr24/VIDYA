@@ -1,0 +1,36 @@
+body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .profile-container {
+      max-width: 700px;
+      margin: 60px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .profile-header h2 {
+      color: #0b4141;
+      font-weight: 600;
+    }
+
+    .btn-save {
+      background-color: #ff6864;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    .btn-save:hover {
+      background-color: #e05653;
+    }

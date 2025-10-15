@@ -1,0 +1,103 @@
+body {
+  background-color: #f4f7fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+.sidebar {
+  background-color: #0b4141;
+  color: white;
+  min-height: 100vh;
+  padding: 20px 0;
+  position: fixed;
+  width: 240px;
+  margin-top: -30px;
+  line-height: 40px;
+
+ 
+}
+
+.sidebar .nav-link {
+  color: white;
+  padding: 10px 20px;
+ 
+  margin-right: 5px;
+  font-weight: 500;
+}
+.sidebar .nav-link.active {
+  background-color: #ff6864;
+  font-weight: 600;
+  border-radius: 15px;
+  
+}
+.sidebar .nav-link:hover {
+  background-color: #ff6864;
+  color: white;
+   transform: translateY(-4px);
+  font-weight: 600;
+  transition: 100ms;
+  border-radius: 15px;
+}
+
+.main-content {
+  margin-left: 260px;
+  padding: 20px;
+}
+
+.card-stat {
+  border-radius: 15px;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+.card-stat:hover {
+  transform: translateY(-5px);
+  background: #ff6864;
+ 
+  
+}
+.card-stat h4 {
+  font-size: 22px;
+  color: #0b4141;
+}
+
+.card-stat p {
+  font-size: 14px;
+  color: #777;
+}
+
+.table th {
+  background-color: #0b4141;
+  color: white;
+}
+.btn-custom {
+  background-color: #ff6864;
+  color: white;
+  border: none;
+}
+.btn-custom:hover {
+  background-color: #e05653;
+}
+.profile-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 25px;
+  text-align: center;
+}
+.profile-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+.chart-placeholder {
+  height: 300px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+  font-size: 18px;
+  font-weight: 600;
+}

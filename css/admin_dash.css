@@ -1,0 +1,119 @@
+body{
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+ }
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #0b4141;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px 10px;
+    transition: all 0.3s ease;
+}
+
+.sidebar h3 {
+    font-size: 22px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 600;
+
+}
+
+.sidebar .nav-link {
+    color: #cfd8dc;
+    font-size: 16px;
+    padding: 12px 20px;
+    
+    border-radius: 6px;
+    margin: 5px 0;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    line-height: 30px;
+    font-weight: 300;
+    margin-left: -20px;
+   
+}
+
+.sidebar .nav-link:hover {
+    background: #FF6864;
+    color: #fff;
+    font-size: large;
+    font-weight: 400;
+    transition: 100ms;
+}
+.sidebar .nav-link.active {
+    background: #FF6864;
+    color: #fff;
+    font-size: large;
+    font-weight: 400;
+    transition: 100ms;
+}
+
+.sidebar .nav-link.text-danger {
+    color: #ff5252;
+}
+
+.sidebar .nav-link.text-danger:hover {
+    background: #ff1744;
+    color: #fff;
+   
+}
+
+.main-content {
+    background: #faf0dc;
+    margin-left: 250px;
+    padding: 20px;
+    margin-top: -25px;
+    height: 716px;
+}
+.sidebar .navitems{
+    margin-bottom: -10px;
+    margin-top: 100px;
+    margin-right: 30px;
+}
+
+.row.g-3.mb-4 .card {
+    border-radius: 15px;
+    text-align: center;
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.row.g-3.mb-4 .card h4 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0b4141;
+    margin-bottom: 5px;
+}
+
+.row.g-3.mb-4 .card p {
+    font-size: 15px;
+    font-weight: 500;
+    color: #555;
+    margin: 0;
+}
+
+.row.g-3.mb-4 .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    background: #ff6060ff;
+}
+
+.row.g-3.mb-4 .col-md-3:nth-child(1) .card {
+    border-left: 6px solid #36A2EB; 
+}
+.row.g-3.mb-4 .col-md-3:nth-child(2) .card {
+    border-left: 6px solid #ff5252; 
+}
+.row.g-3.mb-4 .col-md-3:nth-child(3) .card {
+    border-left: 6px solid #ffb300; 
+}
+.row.g-3.mb-4 .col-md-3:nth-child(4) .card {
+    border-left: 6px solid #4caf50; 
+}

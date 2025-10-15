@@ -1,0 +1,19 @@
+.mybtn {
+  background: #ff6864;
+  border: none;
+  border-radius: 25px;
+  transition: background 0.3s;
+  height: 35px;
+  color: white;
+  font-weight: 500;
+}
+*{
+  font-family: 'Poppins', sans-serif;
+}
+.mybtn:hover {
+  background: #e25550;
+}
+.custom-header{
+    background: #ff6864;
+    color:white
+}

@@ -1,0 +1,92 @@
+ body{
+            font-family: "Poppins", sans-serif;
+            font-weight: 200;
+            font-style: normal;
+        }
+    
+        .container{
+            position: relative;
+            background: #FAF0DC;
+            display: flex;
+            height: 800px;
+            width:100%;
+        }
+        .left{
+            height: 590px;
+            width: 35%;
+            background: #0B4141;
+            margin: 100px 10px 0px 180px;
+    
+        }
+        .right{
+            height: 590px;
+            width: 35%;
+            margin: 100px 0px 0px -10px;
+            background: whitesmoke;
+    
+        }
+         h2,p{
+            text-align: center;
+           
+        }
+       input{
+            width: 65%;
+            height: 25px;
+            border-radius: 10px;
+            border-collapse: collapse;
+            margin-left: 70px;
+        }
+        .inp{
+            width: 57%;
+            margin-left: 0px;
+        }
+     label{
+            margin-left: 70px;
+            line-height: 30px;
+            font-size: medium;
+            font-weight: 500;
+        }    
+       button{
+        margin-left: 30%;
+        height: 40px;
+        width: 170px;
+        background: #FF6864;
+        color: white;
+        border-collapse: collapse;
+        border-radius: 10px;
+        border-style: none;
+       }
+       .left{
+        background-image: url(images/logo4.png);
+        background-position: -213px -40px;
+        background-repeat: no-repeat;
+        background-size: cover;
+       }
+       button:hover{
+        height: 42px;
+        width: 172px;
+        background: #fc5f59ff;
+        border-radius: 10px;
+       }
+       a{
+        font-weight:300;
+       }
+       a:hover{
+        color:#FF6864;
+        font-weight: 500;
+        transition: 5ms;
+       }
+
+        select[name="role"] {
+        width: 47%;          
+        padding: 6px 10px;
+        font-size: 16px;   
+        border-radius: 10px;
+        appearance: none;    
+        background-color: #fff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-collapse: collapse;
+}
+
+

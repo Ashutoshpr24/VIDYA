@@ -1,0 +1,130 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  padding-top: 70px;
+}
+
+.navbar {
+  background: #0b4141;
+  height: 90px;
+  transition: box-shadow 0.3s ease;
+   border-bottom: rgb(243, 220, 203) solid 1.5px;
+}
+
+.navbar-brand, .nav-link {
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.navbar-nav .nav-link {
+  margin-left: 15px;
+}
+
+.navbar-nav .nav-link:hover {
+  font-size: large;
+  transition: 5ms;
+  background: #FF6864;
+  border-radius: 5px;
+  transform: translateY(-4px);
+}
+.navbar-collapse .navbar-nav .nav-link img{
+  filter: brightness(0) invert(0.89);
+}
+.navbar-collapse .navbar-nav .nav-link img:hover{
+  filter: brightness(0) invert(1);
+}
+ul li{
+ margin-left: 25px;
+}
+
+.navbar.scrolled {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.hero {
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
+              url(images/hero1.png) center/cover no-repeat;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  margin-top: -27.8px;
+
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin: 20px 0;
+}
+
+.search-bar {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.categories .card {
+  border: none;
+  transition: transform 0.3s ease;
+  background: #faf0dc;
+}
+
+.categories .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  background-color: #FF6864;
+}
+
+.about-section h2 {
+  font-weight: 700;
+  color: #0b4141;
+}
+
+.about-section p {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.about-section img {
+  height: 450px;
+  width: 550px;
+}
+.about-section img:hover{
+  height: 450px;
+  width: 550px;
+}
+
+.footer {
+  background: #0b4141;
+  color: #fff;
+}
+
+.footer h6,
+.footer h3,
+.footer-text,
+.footer-link {
+  color: #fff !important;
+}
+
+.footer-link {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #FF6864 !important;
+}
+
+
+
+
+
+
+
