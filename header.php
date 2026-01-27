@@ -44,7 +44,7 @@ if (!$conn) {
 
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
-      <a class="navbar-brand fs-3" href="#">
+      <a class="navbar-brand fs-3" href="homepage.php">
         <img src="css/images/logoo.png" height="180px" width="300px" alt="Logo">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
@@ -63,7 +63,7 @@ if (!$conn) {
             <img src="css/images/circle-user.png" height="40px" width="40px" alt="">
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href=".php">Student</a></li>
+            <li><a class="dropdown-item" href="student_dash.php">Student</a></li>
             <li><a class="dropdown-item" href="teacher_dash.php">Teacher</a></li>
             <li><a class="dropdown-item" href="admin_dash.php">Admin</a></li>
           </ul>

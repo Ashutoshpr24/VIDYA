@@ -5,17 +5,21 @@
         }
     
         .container{
-            position: relative;
+            position:fixed;
             background: #FAF0DC;
             display: flex;
-            height: 800px;
+            top: 0;
+            left: 0;
+            height: 810px;
             width:100%;
+            
         }
         .left{
             height: 590px;
             width: 35%;
             background: #0B4141;
-            margin: 100px 10px 0px 180px;
+            margin: 100px 10px 0px 208px;
+            padding-right: 5px;
     
         }
         .right{
@@ -34,7 +38,7 @@
             border-collapse: collapse;
             margin-left: 70px;
         }
-     label{
+       label{
             margin-left: 70px;
             line-height: 35px;
             font-size: medium;
@@ -52,7 +56,7 @@
        }
        .left{
         background-image: url(images/logoo.png);
-        background-position: -213px -40px;
+        background-position: -206px -45px;
         background-repeat: no-repeat;
         background-size: cover;
        }

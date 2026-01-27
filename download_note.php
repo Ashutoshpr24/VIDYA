@@ -9,7 +9,6 @@ if (!$conn) {
 
 $note_id = intval($_GET['id']);
 
-
 $res = mysqli_query($conn, "SELECT file_path FROM notes WHERE id=$note_id AND status='approved'");
 if (!$res || mysqli_num_rows($res) === 0) {
     die("Invalid note or note not approved.");

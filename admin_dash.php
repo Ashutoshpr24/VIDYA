@@ -39,9 +39,10 @@ $total_downloads = 980;
     </div>
   <ul class="nav flex-column">
     <li><a href="#" class="nav-link active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-    <li><a href="manage_students.php" class="nav-link"><i class="bi bi-upload"></i> Manage Students</a></li>
+    <li><a href="manage_students.php" class="nav-link"><i class="bi bi-mortarboard"></i> Manage Students</a></li>
     <li><a href="manage_teachers.php" class="nav-link"><i class="bi bi-person-circle"></i> Manage Teachers</a></li>
-    <li><a href="approve_notes.php" class="nav-link"><i class="bi bi-book"></i> Manage Notes</a></li>
+    <li><a href="approve_notes.php" class="nav-link"><i class="bi bi-patch-check"></i> Approve Notes</a></li>
+    <li><a href="manage_notes.php" class="nav-link"><i class="bi bi-journal-text"></i> Manage Notes</a></li>
     <li><a href="admin_logout.php" class="nav-link"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
   </ul>
 </div>

@@ -51,11 +51,12 @@ $subjects = mysqli_query($conn, "SELECT * FROM subjects");
 
                 notes.forEach(note => {
                     const card = document.createElement('div');
-                    card.className = 'col-md-3 mb-4';
+                  /*  card.className = 'col-md-3 mb-4'; */   card.className = 'col-6 col-md-4 col-lg-3 mb-4';
+
                     card.innerHTML = `
                     <div class="card h-100 shadow-lg border-0 note-card">
                         <!-- Card Image -->
-                        <img src="${note.image ?  + note.image : 'css/images/notes1.png'}" 
+                        <img src="${note.image ? note.image : 'css/images/notes1.png'}" 
                              class="card-img-top" 
                              alt="Note Image">
 
@@ -69,7 +70,7 @@ $subjects = mysqli_query($conn, "SELECT * FROM subjects");
                             <p class="text-muted mb-1"><i class="bi bi-person"></i> <strong>By:</strong> ${note.fullname}</p>
                             <p class="text-muted mb-3"><i class="bi bi-download"></i> <strong>Downloads:</strong> ${note.download_count}</p>
 
-                            <a href="download_note.php?id=${note.id}" class="btn btn-download mt-auto text-white">
+                            <a href="download_note.php?id=${note.note_id}" class="btn btn-download mt-auto text-white">
                                 <i class="bi bi-download"></i> Download
                             </a>
                         </div>
