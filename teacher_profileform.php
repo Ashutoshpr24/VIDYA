@@ -1,74 +1,162 @@
 <?php
 include 'auth.php';
 protectPage(['teacher']);
+
+$conn = mysqli_connect("localhost", "root", "", "collegenotes");
+if (!$conn) die("Connection failed: " . mysqli_connect_error());
+
+$user_id = $_SESSION['user_id'];
+$stmt = $conn->prepare("SELECT * FROM user_profiles WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$profile = $result->fetch_assoc();
+$stmt->close();
+$conn->close();
 ?>
-<?php include 'header.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teacher Profile Form</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/teacher_profileform.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Profile Form • VIDYA</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800">
 
-<div class="container">
-  <div class="profile-container">
-    <div class="profile-header">
-      <h2>Teacher Profile Information</h2>
-      <p class="text-muted">Please fill in your professional details.</p>
+<!-- HEADER -->
+<header class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="#"><img src="css/images/logo vidya1.1.png" class="h-12"></a>
+    <nav class="hidden md:flex gap-8 text-sm">
+      <a href="homepage.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
+        Home<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+      <a href="browse_notes.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
+        Browse<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+      <a href="upload.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
+        Upload<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+      <a href="about.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
+        About<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+      <a href="contact.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
+        Contact<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+    </nav>
+    <div class="relative group">
+      <img src="css/images/user-icon.svg" class="w-10 cursor-pointer">
+      <div class="absolute right-0 hidden group-hover:block bg-white border rounded-lg shadow w-44">
+        <a href="student_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">Student Dashboard</a>
+        <a href="teacher_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">Teacher Dashboard</a>
+        <a href="admin_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">Admin Dashboard</a>
+      </div>
     </div>
-
-    <form method="POST" action="teacher_profileform_process.php" enctype="multipart/form-data">
-      
-      <div class="mb-3">
-        <label class="form-label">Full Name</label>
-        <input type="text" class="form-control" name="fullname" 
-               value="<?php echo htmlspecialchars($_SESSION['username']); ?>" readonly>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" name="email" 
-               value="<?php echo htmlspecialchars($_SESSION['email']); ?>" readonly>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Qualification</label>
-        <input type="text" class="form-control" name="qualification" placeholder="e.g. M.Tech, PhD" required>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Department</label>
-        <input type="text" class="form-control" name="department" placeholder="e.g. Computer Science" required>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Experience (in years)</label>
-        <input type="number" class="form-control" name="experience" placeholder="e.g. 5" min="0" required>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Contact Number</label>
-        <input type="text" class="form-control" name="phone" placeholder="e.g. +91 9876543210" required>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Profile Picture</label>
-        <input type="file" class="form-control" name="profile_pic" accept="image/*">
-      </div>
-
-      <div class="text-center">
-        <button type="submit" class="btn-save">Save Profile</button>
-      </div>
-    </form>
   </div>
+</header>
+
+<!-- PAGE -->
+<div class="max-w-3xl mx-auto px-6 py-10">
+<h2 class="text-3xl font-bold mb-6 text-center">Teacher Profile Form</h2>
+
+<div class="bg-white shadow rounded-xl p-8">
+
+<form method="POST" action="teacher_profileform_process.php" enctype="multipart/form-data" class="space-y-5">
+
+  <div>
+    <label class="block text-gray-700 font-medium mb-1">Full Name</label>
+    <input type="text" name="fullname" value="<?php echo htmlspecialchars($_SESSION['username']); ?>" readonly
+           class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+  </div>
+
+  <div>
+    <label class="block text-gray-700 font-medium mb-1">Email</label>
+    <input type="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email']); ?>" readonly
+           class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+  </div>
+
+  <div>
+    <label class="block text-gray-700 font-medium mb-1">Qualification</label>
+    <input type="text" name="qualification" placeholder="e.g. M.Tech, PhD" required
+           value="<?php echo $profile['qualification'] ?? ''; ?>"
+           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+  </div>
+
+  <div>
+    <label class="block text-gray-700 font-medium mb-1">Department</label>
+    <input type="text" name="branch" placeholder="e.g. Computer Science" required
+           value="<?php echo $profile['branch'] ?? ''; ?>"
+           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+  </div>
+
+  <div>
+    <label class="block text-gray-700 font-medium mb-1">Experience (in years)</label>
+    <input type="number" name="experience" placeholder="e.g. 5" min="0" required
+           value="<?php echo $profile['experience'] ?? ''; ?>"
+           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+  </div>
+
+  <div>
+    <label class="block text-gray-700 font-medium mb-1">Contact Number</label>
+    <input type="text" name="phone" placeholder="e.g. +91 9876543210" required
+           value="<?php echo $profile['phone'] ?? ''; ?>"
+           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+  </div>
+
+  <div>
+    <label class="block text-gray-700 font-medium mb-1">Profile Picture</label>
+    <input type="file" name="profile_image" accept="image/*"
+           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+
+    <!-- Show existing image -->
+    <div id="preview" class="mt-3">
+      <?php if(!empty($profile['profile_image'])): ?>
+        <img src="<?php echo htmlspecialchars($profile['profile_image']); ?>" class="w-32 h-32 rounded-full object-cover border-2 border-emerald-600">
+      <?php endif; ?>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-semibold transition">
+      Save Profile
+    </button>
+  </div>
+
+</form>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<?php include 'footer.php'; ?>
+<div class="mt-6 text-center">
+    <a href="teacher_dash.php" class="inline-block bg-gray-800 hover:bg-black text-white px-6 py-2 rounded-lg">
+        Back to Dashboard
+    </a>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-gray-400 py-10 text-center mt-10">
+© 2026 VIDYA. All rights reserved by Ashutosh Prajapati.
+</footer>
+
+<!-- JS for live preview -->
+<script>
+const input = document.querySelector('input[name="profile_image"]');
+const previewContainer = document.getElementById('preview');
+
+input.addEventListener('change', function(){
+  const file = this.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      previewContainer.innerHTML = `<img src="${e.target.result}" class="w-32 h-32 rounded-full object-cover border-2 border-emerald-600">`;
+    }
+    reader.readAsDataURL(file);
+  }
+});
+</script>
+
 </body>
 </html>
