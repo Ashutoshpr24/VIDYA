@@ -4,109 +4,219 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: admin_login.php");
     exit();
 }
-include 'header.php';
 
-// Example dynamic values (later fetch from Db
 $total_students = 120;
 $total_teachers = 15;
 $total_notes = 340;
 $total_downloads = 980;
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Dashboard - VIDYA</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Schoolbell&display=swap">
-   <link rel="stylesheet" href="css/admin_dash.css">
+<meta charset="UTF-8">
+<title>Admin Dashboard - VIDYA</title>
 
-<style>
-
-</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
-<body class="bg-light">
-<div class="d-flex">
-  
- <div class="sidebar">
-    <div class="navitems">
-     <h3> Admin Panel</h3>
-    </div>
-  <ul class="nav flex-column">
-    <li><a href="#" class="nav-link active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-    <li><a href="manage_students.php" class="nav-link"><i class="bi bi-mortarboard"></i> Manage Students</a></li>
-    <li><a href="manage_teachers.php" class="nav-link"><i class="bi bi-person-circle"></i> Manage Teachers</a></li>
-    <li><a href="approve_notes.php" class="nav-link"><i class="bi bi-patch-check"></i> Approve Notes</a></li>
-    <li><a href="manage_notes.php" class="nav-link"><i class="bi bi-journal-text"></i> Manage Notes</a></li>
-    <li><a href="admin_logout.php" class="nav-link"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-  </ul>
+
+<body class="bg-gray-50">
+
+<!-- HEADER -->
+<header class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <a href="#" class="flex items-center">
+      <img src="css/images/logo vidya1.1.png" alt="VIDYA Logo" class="h-12 w-auto">
+      <span class="ml-2 text-xl font-bold text-emerald-600 hidden md:inline"></span>
+    </a>
+
+    <!-- Nav links -->
+    <nav class="hidden md:flex gap-8 text-sm">
+      <a href="homepage.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+        Home
+        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+
+      <a href="browse_notes.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+        Browse
+        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+
+      <a href="upload.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+        Upload
+        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+
+      <a href="about.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+        About
+        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+
+      <a href="contact.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+        Contact
+        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+      </a>
+    </nav>
+
+    <!-- Buttons -->
+<div class="relative inline-block group">
+
+<button class="flex items-center focus:outline-none">
+<img src="css/images/user-icon.svg"
+alt="User"
+class="w-10 h-10 hover:scale-105 transition">
+</button>
+
+<div class="absolute right-0 top-full w-44 bg-white border rounded-lg shadow-lg hidden group-hover:block z-50">
+
+<a href="student_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
+Student Dashboard
+</a>
+
+<a href="teacher_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
+Teacher Dashboard
+</a>
+
+<a href="admin_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
+Admin Dashboard
+</a>
+
 </div>
 
-
-<div class="main-content container-fluid p-4">
- 
-
-    <h2><?php echo "Hello, " . $_SESSION['admin_name']; ?></h2>
-
-   
-    <div class="row g-3 mb-4">
-      <div class="col-md-3"><div class="card p-3 text-center shadow"><h4><?= $total_students ?></h4><p>Students</p></div></div>
-      <div class="col-md-3"><div class="card p-3 text-center shadow"><h4><?= $total_teachers ?></h4><p>Teachers</p></div></div>
-      <div class="col-md-3"><div class="card p-3 text-center shadow"><h4><?= $total_notes ?></h4><p>Notes Uploaded</p></div></div>
-      <div class="col-md-3"><div class="card p-3 text-center shadow"><h4><?= $total_downloads ?></h4><p>Downloads</p></div></div>
-    </div>
-
-   
-    <div class="row g-3">
-      <div class="col-md-8">
-        <div class="card p-3 shadow">
-          <h5>Notes Uploaded per Month</h5>
-          <canvas id="notesChart"></canvas>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card p-3 shadow">
-          <h5>Users Breakdown</h5>
-          <canvas id="usersChart"></canvas>
-        </div>
-      </div>
-    </div>
+</div>
   </div>
+</header>
+
+
+<div class="flex">
+
+<!-- SIDEBAR -->
+<div class="w-64 bg-white shadow-md min-h-screen">
+
+<div class="p-6 font-bold text-lg border-b">
+Admin Panel
 </div>
+
+<nav class="flex flex-col p-4 space-y-2 text-sm">
+
+<a href="#" class="bg-emerald-600 text-white px-4 py-2 rounded-lg">
+Dashboard
+</a>
+
+<a href="manage_students.php" class="px-4 py-2 rounded-lg hover:bg-gray-100">
+Manage Students
+</a>
+
+<a href="manage_teachers.php" class="px-4 py-2 rounded-lg hover:bg-gray-100">
+Manage Teachers
+</a>
+
+<a href="approve_notes.php" class="px-4 py-2 rounded-lg hover:bg-gray-100">
+Approve Notes
+</a>
+
+<a href="manage_notes.php" class="px-4 py-2 rounded-lg hover:bg-gray-100">
+Manage Notes
+</a>
+
+<a href="admin_logout.php" class="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+Logout
+</a>
+
+</nav>
+</div>
+
+
+<!-- MAIN CONTENT -->
+<div class="flex-1 p-8">
+
+<h2 class="text-2xl font-bold mb-6">
+<?php echo "Hello, " . $_SESSION['admin_name']; ?>
+</h2>
+
+
+<!-- STAT CARDS -->
+<div class="grid md:grid-cols-4 gap-6 mb-8">
+
+<div class="bg-white p-6 rounded-xl shadow text-center">
+<h3 class="text-3xl font-bold text-emerald-600"><?= $total_students ?></h3>
+<p class="text-gray-500 mt-1">Students</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow text-center">
+<h3 class="text-3xl font-bold text-emerald-600"><?= $total_teachers ?></h3>
+<p class="text-gray-500 mt-1">Teachers</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow text-center">
+<h3 class="text-3xl font-bold text-emerald-600"><?= $total_notes ?></h3>
+<p class="text-gray-500 mt-1">Notes Uploaded</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow text-center">
+<h3 class="text-3xl font-bold text-emerald-600"><?= $total_downloads ?></h3>
+<p class="text-gray-500 mt-1">Downloads</p>
+</div>
+
+</div>
+
+
+<!-- CHARTS -->
+<div class="grid md:grid-cols-3 gap-6">
+
+<div class="md:col-span-2 bg-white p-6 rounded-xl shadow">
+<h4 class="font-semibold mb-4">Notes Uploaded per Month</h4>
+<canvas id="notesChart"></canvas>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow">
+<h4 class="font-semibold mb-4">Users Breakdown</h4>
+<canvas id="usersChart"></canvas>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
 
 <script>
 
 const ctx1 = document.getElementById('notesChart');
+
 new Chart(ctx1, {
-    type: 'line',
-    data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul'],
-        datasets: [{
-            label: 'Notes Uploaded',
-            data: [5, 10, 7, 12, 15, 20, 25],
-            borderColor: 'blue',
-            fill: true
-        }]
-    }
+type: 'line',
+data: {
+labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul'],
+datasets: [{
+label: 'Notes Uploaded',
+data: [5,10,7,12,15,20,25],
+borderColor: '#059669',
+backgroundColor: 'rgba(5,150,105,0.2)',
+fill: true
+}]
+}
 });
 
 
 const ctx2 = document.getElementById('usersChart');
+
 new Chart(ctx2, {
-    type: 'doughnut',
-    data: {
-        labels: ['Students','Teachers'],
-        datasets: [{
-            data: [<?= $total_students ?>, <?= $total_teachers ?>],
-            backgroundColor: ['#36A2EB','#ff5252']
-        }]
-    }
+type: 'doughnut',
+data: {
+labels: ['Students','Teachers'],
+datasets: [{
+data: [<?= $total_students ?>, <?= $total_teachers ?>],
+backgroundColor: ['#10b981','#ef4444']
+}]
+}
 });
+
 </script>
+
 </body>
 </html>

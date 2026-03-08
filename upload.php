@@ -1,8 +1,9 @@
 <?php
 include 'auth.php';
 protectPage(['student', 'teacher', 'admin']);
-include 'header.php';
+?>
 
+<?php
 $conn = mysqli_connect("localhost", "root", "", "collegenotes");
 if (!$conn) {
     die("DB connection failed: " . mysqli_connect_error());
@@ -10,76 +11,197 @@ if (!$conn) {
 
 $subjects = mysqli_query($conn, "SELECT * FROM subjects");
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIDYA • Upload Notes</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="css/upload.css">
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+</head>
 
-            <?php
-            if (isset($_GET['success'])) {
-                echo '<div class="alert alert-success">✅ Notes uploaded successfully and waiting for admin/teacher approval!</div>';
-            } elseif (isset($_GET['error'])) {
-                echo '<div class="alert alert-danger">❌ Error: ' . htmlspecialchars($_GET['error']) . '</div>';
-            }
-            ?>
+<body class="bg-gray-50 text-gray-800">
 
-            <div class="card shadow">
-                <div class="card-header custom-header">
-                    <h4>Upload Your Notes</h4>
-                </div>
-                <div class="card-body">
-                    <form action="upload_process.php" method="POST" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label class="form-label">Select Branch</label>
-                            <select name="subject_id" class="form-control" required>
-                                <option value="">-- Choose Branch --</option>
-                                <?php while($row = mysqli_fetch_assoc($subjects)) { ?>
-                                    <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
+<!-- HEADER -->
+<header class="bg-white shadow-sm">
+<div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-                        <div class="mb-3">
-                            <label class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control" required>
-                        </div>
+<a href="#" class="flex items-center">
+<img src="css/images/logo vidya1.1.png" alt="VIDYA Logo" class="h-12 w-auto">
+</a>
 
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" rows="3"></textarea>
-                        </div>
+<nav class="hidden md:flex gap-8 text-sm">
 
-                        <div class="mb-3">
-                            <label class="form-label">Upload File</label>
-                            <input type="file" name="file" class="form-control" accept=".pdf,.doc,.docx,.ppt,.pptx" required>
-                        </div>
+<a href="homepage.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+Home
+<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+</a>
 
-                        <button type="submit" name="upload" class="mybtn btn-primary w-100">Upload Notes</button>
-                    </form>
-                </div>
-            </div>
+<a href="browse_notes.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+Browse
+<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+</a>
 
-        </div>
-    </div>
+<a href="upload.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+Upload
+<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+</a>
+
+<a href="about.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+About
+<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+</a>
+
+<a href="contact.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
+Contact
+<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+</a>
+
+</nav>
+
+<div class="relative inline-block group">
+
+<button class="flex items-center focus:outline-none">
+<img src="css/images/user-icon.svg" class="w-10 h-10 hover:scale-105 transition rounded-full border border-emerald-600">
+</button>
+
+<div class="absolute right-0 top-full w-44 bg-white border rounded-lg shadow-lg hidden group-hover:block z-50">
+
+<a href="student_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
+Student Dashboard
+</a>
+
+<a href="teacher_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
+Teacher Dashboard
+</a>
+
+<a href="admin_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
+Admin Dashboard
+</a>
+
 </div>
-<?php
-if (isset($_SESSION['role'])) {
-    if ($_SESSION['role'] === 'admin') {
-        $url = 'admin_dash.php';
-    } elseif ($_SESSION['role'] === 'teacher') {
-        $url = 'teacher_dash.php';
-    } elseif ($_SESSION['role'] === 'student') {
-        $url = null;
-    } else {
-        $url = 'homepage.php'; 
-    }
+</div>
 
-    if ($url): ?>
-        <a href="<?php echo $url; ?>" class="btn btn-dark bi bi-box-arrow-right" style="margin-left: 40px;">
-            Back to Dashboard
-        </a>
-    <?php endif; 
+</div>
+</header>
+
+<!-- FORM -->
+<div class="max-w-4xl mx-auto px-6 py-16">
+
+<?php
+if (isset($_GET['success'])) {
+echo '<div id="alertBox" class="bg-emerald-100 border border-emerald-500 text-emerald-800 p-4 rounded mb-6">
+✅ Notes uploaded successfully and waiting for admin/teacher approval!
+</div>';
+}
+
+elseif (isset($_GET['error'])) {
+echo '<div id="alertBox" class="bg-red-100 border border-red-500 text-red-800 p-4 rounded mb-6">
+❌ Error: ' . htmlspecialchars($_GET['error']) . '
+</div>';
 }
 ?>
 
-<?php include 'footer.php'; ?>
+<div class="bg-white shadow-lg rounded-xl p-8">
+
+<h2 class="text-2xl font-bold mb-6">Upload Your Notes</h2>
+
+<form action="upload_process.php" method="POST" enctype="multipart/form-data" class="space-y-4">
+
+<div>
+<label class="block mb-2 font-semibold">Select Branch</label>
+
+<select name="subject_id"
+class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+required>
+
+<option value="">-- Choose Branch --</option>
+
+<?php while($row = mysqli_fetch_assoc($subjects)) { ?>
+
+<option value="<?= $row['id'] ?>">
+<?= htmlspecialchars($row['name']) ?>
+</option>
+
+<?php } ?>
+
+</select>
+</div>
+
+<div>
+<label class="block mb-2 font-semibold">Title</label>
+
+<input type="text"
+name="title"
+class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+required>
+
+</div>
+
+<div>
+<label class="block mb-2 font-semibold">Description</label>
+
+<textarea name="description"
+rows="3"
+class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600"></textarea>
+
+</div>
+
+<div>
+<label class="block mb-2 font-semibold">Upload File</label>
+
+<input type="file"
+name="file"
+accept=".pdf,.doc,.docx,.ppt,.pptx"
+class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+required>
+
+</div>
+
+<button type="submit"
+name="upload"
+class="w-full bg-emerald-600 text-white font-semibold py-2 rounded hover:bg-emerald-700 transition">
+
+Upload Notes
+
+</button>
+
+</form>
+
+</div>
+
+<?php
+if (isset($_SESSION['role'])) {
+
+if ($_SESSION['role'] === 'admin') $url = 'admin_dash.php';
+elseif ($_SESSION['role'] === 'teacher') $url = 'teacher_dash.php';
+elseif ($_SESSION['role'] === 'student') $url = null;
+else $url = 'homepage.php';
+
+if ($url): ?>
+
+<a href="<?= $url ?>"
+class="inline-block mt-6 px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-900 transition">
+
+Back to Dashboard
+
+</a>
+
+<?php endif; } ?>
+
+</div>
+
+
+<!-- SCRIPT TO REMOVE SUCCESS PARAMETER -->
+<script>
+
+if (window.location.search.includes("success") || window.location.search.includes("error")) {
+window.history.replaceState({}, document.title, window.location.pathname);
+}
+
+</script>
+
+</body>
+</html>
