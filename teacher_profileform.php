@@ -1,6 +1,7 @@
 <?php
 include 'auth.php';
 protectPage(['teacher']);
+include 'header.php';
 
 $conn = mysqli_connect("localhost", "root", "", "collegenotes");
 if (!$conn) die("Connection failed: " . mysqli_connect_error());
@@ -25,37 +26,6 @@ $conn->close();
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-<!-- HEADER -->
-<header class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-    <a href="#"><img src="css/images/logo vidya1.1.png" class="h-12"></a>
-    <nav class="hidden md:flex gap-8 text-sm">
-      <a href="homepage.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        Home<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-      <a href="browse_notes.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        Browse<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-      <a href="upload.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        Upload<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-      <a href="about.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        About<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-      <a href="contact.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        Contact<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-    </nav>
-    <div class="relative group">
-      <img src="css/images/user-icon.svg" class="w-10 cursor-pointer">
-      <div class="absolute right-0 hidden group-hover:block bg-white border rounded-lg shadow w-44">
-        <a href="student_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">Student Dashboard</a>
-        <a href="teacher_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">Teacher Dashboard</a>
-        <a href="admin_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">Admin Dashboard</a>
-      </div>
-    </div>
-  </div>
-</header>
 
 <!-- PAGE -->
 <div class="max-w-3xl mx-auto px-6 py-10">

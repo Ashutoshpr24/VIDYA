@@ -5,10 +5,47 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-$total_students = 120;
-$total_teachers = 15;
-$total_notes = 340;
-$total_downloads = 980;
+include 'header.php';
+
+$conn = mysqli_connect("localhost", "root", "", "collegenotes");
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+/* TOTAL STUDENTS */
+$students_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM users WHERE role='student'");
+$students_data = mysqli_fetch_assoc($students_query);
+$total_students = $students_data['total'];
+
+/* TOTAL TEACHERS */
+$teachers_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM users WHERE role='teacher'");
+$teachers_data = mysqli_fetch_assoc($teachers_query);
+$total_teachers = $teachers_data['total'];
+
+/* TOTAL NOTES */
+$notes_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM notes");
+$notes_data = mysqli_fetch_assoc($notes_query);
+$total_notes = $notes_data['total'];
+
+/* TOTAL DOWNLOADS */
+$downloads_query = mysqli_query($conn, "SELECT SUM(download_count) as total FROM notes");
+$downloads_data = mysqli_fetch_assoc($downloads_query);
+$total_downloads = $downloads_data['total'] ?? 0;
+
+/* NOTES PER MONTH */
+$chart_query = mysqli_query($conn,"
+SELECT MONTH(uploaded_at) as month, COUNT(*) as total
+FROM notes
+GROUP BY MONTH(uploaded_at)
+");
+
+$months = [];
+$notes_count = [];
+
+while($row = mysqli_fetch_assoc($chart_query)){
+    $months[] = $row['month'];
+    $notes_count[] = $row['total'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -24,74 +61,11 @@ $total_downloads = 980;
 
 <body class="bg-gray-50">
 
-<!-- HEADER -->
-<header class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-    <!-- Logo -->
-    <a href="#" class="flex items-center">
-      <img src="css/images/logo vidya1.1.png" alt="VIDYA Logo" class="h-12 w-auto">
-      <span class="ml-2 text-xl font-bold text-emerald-600 hidden md:inline"></span>
-    </a>
-
-    <!-- Nav links -->
-    <nav class="hidden md:flex gap-8 text-sm">
-      <a href="homepage.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        Home
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-
-      <a href="browse_notes.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        Browse
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-
-      <a href="upload.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        Upload
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-
-      <a href="about.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        About
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-
-      <a href="contact.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        Contact
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-    </nav>
-
-    <!-- Buttons -->
-<div class="relative inline-block group">
-
-<button class="flex items-center focus:outline-none">
-<img src="css/images/user-icon.svg"
-alt="User"
-class="w-10 h-10 hover:scale-105 transition">
-</button>
-
-<div class="absolute right-0 top-full w-44 bg-white border rounded-lg shadow-lg hidden group-hover:block z-50">
-
-<a href="student_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
-Student Dashboard
-</a>
-
-<a href="teacher_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
-Teacher Dashboard
-</a>
-
-<a href="admin_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
-Admin Dashboard
-</a>
-
-</div>
-
-</div>
-  </div>
-</header>
-
-
 <div class="flex">
+
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
 
 <!-- SIDEBAR -->
 <div class="w-64 bg-white shadow-md min-h-screen">
@@ -102,27 +76,38 @@ Admin Panel
 
 <nav class="flex flex-col p-4 space-y-2 text-sm">
 
-<a href="#" class="bg-emerald-600 text-white px-4 py-2 rounded-lg">
+<a href="admin_dash.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'admin_dash.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
 Dashboard
 </a>
 
-<a href="manage_students.php" class="px-4 py-2 rounded-lg hover:bg-gray-100">
+<a href="manage_students.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_students.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
 Manage Students
 </a>
 
-<a href="manage_teachers.php" class="px-4 py-2 rounded-lg hover:bg-gray-100">
+<a href="manage_teachers.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_teachers.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
 Manage Teachers
 </a>
 
-<a href="approve_notes.php" class="px-4 py-2 rounded-lg hover:bg-gray-100">
+<a href="approve_notes.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'approve_notes.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
 Approve Notes
 </a>
 
-<a href="manage_notes.php" class="px-4 py-2 rounded-lg hover:bg-gray-100">
+<a href="manage_notes.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_notes.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
 Manage Notes
 </a>
 
-<a href="admin_logout.php" class="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+<a href="admin_logout.php"
+class="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
 Logout
 </a>
 
@@ -134,7 +119,7 @@ Logout
 <div class="flex-1 p-8">
 
 <h2 class="text-2xl font-bold mb-6">
-<?php echo "Hello, " . $_SESSION['admin_name']; ?>
+Hello, <?php echo $_SESSION['admin_name']; ?>
 </h2>
 
 
@@ -183,26 +168,28 @@ Logout
 </div>
 
 
-
 <script>
 
+/* NOTES PER MONTH CHART */
 const ctx1 = document.getElementById('notesChart');
 
 new Chart(ctx1, {
 type: 'line',
 data: {
-labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul'],
+labels: <?= json_encode($months) ?>,
 datasets: [{
 label: 'Notes Uploaded',
-data: [5,10,7,12,15,20,25],
+data: <?= json_encode($notes_count) ?>,
 borderColor: '#059669',
 backgroundColor: 'rgba(5,150,105,0.2)',
-fill: true
+fill: true,
+tension: 0.3
 }]
 }
 });
 
 
+/* USERS CHART */
 const ctx2 = document.getElementById('usersChart');
 
 new Chart(ctx2, {

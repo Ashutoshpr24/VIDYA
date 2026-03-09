@@ -1,5 +1,6 @@
 <?php
 include 'auth.php';
+include 'header.php';
 protectPage(['teacher']); 
 
 $conn = mysqli_connect("localhost", "root", "", "collegenotes");
@@ -15,6 +16,8 @@ $result = $stmt->get_result();
 $profile = $result->fetch_assoc();
 $stmt->close();
 $conn->close();
+
+$current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
@@ -25,104 +28,170 @@ $conn->close();
 <title>Teacher Profile • VIDYA</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-50 text-gray-800">
 
-<!-- HEADER -->
-<header class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+<!-- MAIN LAYOUT -->
+<div class="flex">
 
-    <a href="#">
-      <img src="css/images/logo vidya1.1.png" class="h-12">
-    </a>
+<!-- SIDEBAR -->
+<div class="w-64 bg-white shadow-md min-h-screen">
 
-    <nav class="hidden md:flex gap-8 text-sm">
-      <a href="homepage.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        Home
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
+<div class="p-6 font-bold text-lg border-b">
+Teacher Panel
+</div>
 
-      <a href="browse_notes.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        Browse
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
+<nav class="flex flex-col p-4 space-y-2 text-sm">
 
-      <a href="upload.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        Upload
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
+<a href="teacher_dash.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'teacher_dash.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Dashboard
+</a>
 
-      <a href="about.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        About
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
+<a href="manage_students.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_students.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Manage Students
+</a>
 
-      <a href="contact.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-        Contact
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-    </nav>
+<a href="approve_notes.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'approve_notes.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Approve Notes
+</a>
 
-    <div class="relative group">
-      <img src="css/images/user-icon.svg" class="w-10 cursor-pointer">
-      <div class="absolute right-0 hidden group-hover:block bg-white border rounded-lg shadow w-44">
-        <a href="student_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">Student Dashboard</a>
-        <a href="teacher_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">Teacher Dashboard</a>
-        <a href="admin_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">Admin Dashboard</a>
-      </div>
-    </div>
+<a href="manage_notes.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_notes.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Manage Notes
+</a>
 
-  </div>
-</header>
+<a href="teacher_profile.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'teacher_profile.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Profile
+</a>
 
-<!-- PAGE -->
-<div class="max-w-3xl mx-auto px-6 py-10">
+<a href="logout.php"
+class="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+Logout
+</a>
 
-<h2 class="text-3xl font-bold mb-6">Teacher Profile</h2>
+</nav>
+</div>
 
-<div class="bg-white shadow rounded-xl p-8 flex flex-col items-center gap-4">
+<!-- PAGE CONTENT -->
+<div class="flex-1">
 
-    <?php if($profile && $profile['profile_image'] && file_exists($profile['profile_image'])): ?>
-        <img src="<?php echo htmlspecialchars($profile['profile_image']); ?>" alt="Profile Picture" class="w-32 h-32 rounded-full object-cover border-2 border-emerald-600">
-    <?php else: ?>
-        <img src="default_avatar.png" alt="Profile Picture" class="w-32 h-32 rounded-full object-cover border-2 border-emerald-600">
-    <?php endif; ?>
+<div class="max-w-5xl mx-auto px-6 py-10">
 
-    <h3 class="text-2xl font-semibold text-emerald-600"><?php echo htmlspecialchars($_SESSION['username']); ?></h3>
-    <p class="text-gray-700"><strong>Email:</strong> <?php echo htmlspecialchars($_SESSION['email']); ?></p>
+<h2 class="text-3xl font-bold mb-6">My Profile</h2>
 
-    <?php if($profile): ?>
-        <?php if($profile['qualification']): ?>
-            <p class="text-gray-700"><strong>Qualification:</strong> <?php echo htmlspecialchars($profile['qualification']); ?></p>
-        <?php endif; ?>
+<!-- PROFILE CARD -->
+<div class="bg-white shadow-xl rounded-2xl overflow-hidden">
 
-        <?php if($profile['branch']): ?>
-            <p class="text-gray-700"><strong>Department:</strong> <?php echo htmlspecialchars($profile['branch']); ?></p>
-        <?php endif; ?>
+<div class="h-3 bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-700"></div>
 
-        <?php if($profile['experience'] && $profile['experience'] > 0): ?>
-            <p class="text-gray-700"><strong>Experience:</strong> <?php echo htmlspecialchars($profile['experience']); ?> years</p>
-        <?php endif; ?>
+<div class="p-10 flex gap-10 items-start">
 
-        <?php if($profile['phone']): ?>
-            <p class="text-gray-700"><strong>Contact:</strong> <?php echo htmlspecialchars($profile['phone']); ?></p>
-        <?php endif; ?>
-    <?php else: ?>
-        <p class="text-gray-500 italic text-center">
-            Profile not yet created. Please fill your profile information.
-        </p>
-        <a href="teacher_profileform.php" class="mt-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-2 rounded-lg">Create Profile</a>
-    <?php endif; ?>
+<!-- PROFILE IMAGE -->
+<div class="flex flex-col items-center">
 
-    <a href="teacher_profileform.php" class="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg">
-        Update Profile
-    </a>
+<div class="p-1 rounded-full bg-gradient-to-r from-emerald-500 to-green-600">
+
+<?php if($profile && $profile['profile_image'] && file_exists($profile['profile_image'])): ?>
+<img src="<?php echo htmlspecialchars($profile['profile_image']); ?>" 
+class="w-32 h-32 rounded-full object-cover bg-white p-1">
+<?php else: ?>
+<img src="default_avatar.png" 
+class="w-32 h-32 rounded-full object-cover bg-white p-1">
+<?php endif; ?>
 
 </div>
 
-<div class="mt-6 text-center">
-    <a href="teacher_dash.php" class="inline-block bg-gray-800 hover:bg-black text-white px-6 py-2 rounded-lg">
-        Back to Dashboard
-    </a>
+</div>
+
+<!-- PROFILE INFO -->
+<div class="flex-1">
+
+<h3 class="text-3xl font-bold text-emerald-600 mb-2">
+<?php echo htmlspecialchars($_SESSION['username']); ?>
+</h3>
+
+<p class="text-gray-500 mb-6">
+<?php echo htmlspecialchars($_SESSION['email']); ?>
+</p>
+
+<div class="grid grid-cols-2 gap-4 text-sm">
+
+<?php if($profile && $profile['qualification']): ?>
+<div class="bg-gray-50 p-3 rounded-lg">
+<span class="font-semibold text-gray-600">Qualification</span>
+<p class="text-gray-800"><?php echo htmlspecialchars($profile['qualification']); ?></p>
+</div>
+<?php endif; ?>
+
+<?php if($profile && $profile['branch']): ?>
+<div class="bg-gray-50 p-3 rounded-lg">
+<span class="font-semibold text-gray-600">Department</span>
+<p class="text-gray-800"><?php echo htmlspecialchars($profile['branch']); ?></p>
+</div>
+<?php endif; ?>
+
+<?php if($profile && $profile['experience']): ?>
+<div class="bg-gray-50 p-3 rounded-lg">
+<span class="font-semibold text-gray-600">Experience</span>
+<p class="text-gray-800"><?php echo htmlspecialchars($profile['experience']); ?> years</p>
+</div>
+<?php endif; ?>
+
+<?php if($profile && $profile['phone']): ?>
+<div class="bg-gray-50 p-3 rounded-lg">
+<span class="font-semibold text-gray-600">Contact</span>
+<p class="text-gray-800"><?php echo htmlspecialchars($profile['phone']); ?></p>
+</div>
+<?php endif; ?>
+
+</div>
+
+<?php if(!$profile): ?>
+
+<p class="text-gray-500 italic mt-6">
+Profile not yet created. Please fill your profile information.
+</p>
+
+<a href="teacher_profileform.php"
+class="inline-block mt-4 bg-amber-500 hover:bg-amber-600 text-white px-6 py-2 rounded-lg">
+Create Profile
+</a>
+
+<?php endif; ?>
+
+<div class="mt-6 flex gap-4">
+
+<a href="teacher_profileform.php"
+class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg shadow transition">
+Update Profile
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mt-6">
+<a href="teacher_dash.php"
+class="inline-block bg-gray-800 hover:bg-black text-white px-6 py-2 rounded-lg">
+Back to Dashboard
+</a>
+</div>
+
+</div>
+
 </div>
 
 </div>

@@ -1,6 +1,7 @@
 <?php
 include 'auth.php';
 protectPage(['student', 'teacher', 'admin']);
+include 'header.php';
 
 $conn = mysqli_connect("localhost", "root", "", "collegenotes");
 $subjects = mysqli_query($conn, "SELECT * FROM subjects");
@@ -8,165 +9,103 @@ $subjects = mysqli_query($conn, "SELECT * FROM subjects");
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Browse Notes • VIDYA</title>
+    <title>Browse Notes • VIDYA</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
 
 </head>
 
 <body class="bg-gray-50 text-gray-800">
 
-<!-- HEADER -->
-<header class="bg-white shadow-sm">
-<div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <!-- PAGE -->
+    <div class="max-w-7xl mx-auto px-6 py-10">
 
-<a href="#" class="flex items-center">
-<img src="css/images/logo vidya1.1.png" class="h-12">
-</a>
-
-<nav class="hidden md:flex gap-8 text-sm">
-
-<a href="homepage.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-Home
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-</a>
-
-<a href="browse_notes.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-Browse
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-</a>
-
-<a href="upload.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-Upload
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-</a>
-
-<a href="about.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-About
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-</a>
-
-<a href="contact.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-Contact
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-</a>
-
-</nav>
-
-<div class="relative group">
-
-<img src="css/images/user-icon.svg" class="w-10 cursor-pointer">
-
-<div class="absolute right-0 hidden group-hover:block bg-white border rounded-lg shadow w-44">
-
-<a href="student_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">
-Student Dashboard
-</a>
-
-<a href="teacher_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">
-Teacher Dashboard
-</a>
-
-<a href="admin_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">
-Admin Dashboard
-</a>
-
-</div>
-</div>
-
-</div>
-</header>
+        <h2 class="text-3xl font-bold mb-6">Browse Notes</h2>
 
 
-<!-- PAGE -->
-<div class="max-w-7xl mx-auto px-6 py-10">
+        <!-- SEARCH BAR -->
+        <div class="bg-white p-6 rounded-xl shadow mb-8">
 
-<h2 class="text-3xl font-bold mb-6">Browse Notes</h2>
+            <div class="grid md:grid-cols-3 gap-4">
 
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by title or description"
+                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 outline-none">
 
-<!-- SEARCH BAR -->
-<div class="bg-white p-6 rounded-xl shadow mb-8">
+                <select
+                    id="subjectFilter"
+                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 outline-none">
 
-<div class="grid md:grid-cols-3 gap-4">
+                    <option value="0">All branches</option>
 
-<input
-type="text"
-id="searchInput"
-placeholder="Search by title or description"
-class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <?php while ($row = mysqli_fetch_assoc($subjects)): ?>
 
-<select
-id="subjectFilter"
-class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <option value="<?= $row['id'] ?>">
+                            <?= htmlspecialchars($row['name']) ?>
+                        </option>
 
-<option value="0">All branches</option>
+                    <?php endwhile; ?>
 
-<?php while ($row = mysqli_fetch_assoc($subjects)): ?>
+                </select>
 
-<option value="<?= $row['id'] ?>">
-<?= htmlspecialchars($row['name']) ?>
-</option>
+                <button
+                    id="searchBtn"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg px-6 py-2">
 
-<?php endwhile; ?>
+                    Search
 
-</select>
+                </button>
 
-<button
-id="searchBtn"
-class="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg px-6 py-2">
+            </div>
 
-Search
-
-</button>
-
-</div>
-
-</div>
+        </div>
 
 
-<!-- NOTES GRID -->
-<div id="notesContainer" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        <!-- NOTES GRID -->
+        <div id="notesContainer" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
 
-</div>
+    </div>
 
 
-<script>
+    <script>
+        const notesContainer = document.getElementById('notesContainer');
 
-const notesContainer = document.getElementById('notesContainer');
+        function fetchNotes() {
 
-function fetchNotes(){
+            const search = document.getElementById('searchInput').value;
+            const subject = document.getElementById('subjectFilter').value;
 
-const search = document.getElementById('searchInput').value;
-const subject = document.getElementById('subjectFilter').value;
+            fetch(`browse_notes_process.php?search=${encodeURIComponent(search)}&subject_id=${subject}`)
 
-fetch(`browse_notes_process.php?search=${encodeURIComponent(search)}&subject_id=${subject}`)
+                .then(res => res.json())
 
-.then(res => res.json())
+                .then(notes => {
 
-.then(notes => {
+                    notesContainer.innerHTML = '';
 
-notesContainer.innerHTML = '';
+                    if (notes.length === 0) {
 
-if(notes.length === 0){
-
-notesContainer.innerHTML =
-`<div class="col-span-full text-center text-gray-500">
+                        notesContainer.innerHTML =
+                            `<div class="col-span-full text-center text-gray-500">
 No notes found
 </div>`;
 
-return;
-}
+                        return;
+                    }
 
-notes.forEach(note => {
+                    notes.forEach(note => {
 
-const card = document.createElement('div');
+                        const card = document.createElement('div');
 
-card.innerHTML = `
+                        card.innerHTML = `
 
 <div class="bg-white rounded-xl shadow hover:shadow-xl transition overflow-hidden flex flex-col">
 
@@ -205,69 +144,64 @@ Download
 
 `;
 
-notesContainer.appendChild(card);
+                        notesContainer.appendChild(card);
 
-});
+                    });
 
-});
+                });
 
-}
+        }
 
-fetchNotes();
+        fetchNotes();
 
-document.getElementById('searchBtn').addEventListener('click',fetchNotes);
+        document.getElementById('searchBtn').addEventListener('click', fetchNotes);
 
-document.getElementById('searchInput').addEventListener('keyup',e=>{
-if(e.key==='Enter') fetchNotes();
-});
+        document.getElementById('searchInput').addEventListener('keyup', e => {
+            if (e.key === 'Enter') fetchNotes();
+        });
 
-setInterval(fetchNotes,10000);
-
-</script>
-
-
-<?php
-if(isset($_SESSION['role'])){
-
-if($_SESSION['role']==='admin'){
-$url='admin_dash.php';
-}
-
-elseif($_SESSION['role']==='teacher'){
-$url='teacher_dash.php';
-}
-
-elseif($_SESSION['role']==='student'){
-$url=null;
-}
-
-else{
-$url='homepage.php';
-}
-
-if($url): ?>
-
-<div class="max-w-7xl mx-auto px-6 pb-10">
-
-<a
-href="<?php echo $url; ?>"
-class="inline-block bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-black">
-
-Back to Dashboard
-
-</a>
-
-</div>
-
-<?php endif; } ?>
+        setInterval(fetchNotes, 10000);
+    </script>
 
 
-<!-- FOOTER -->
-<footer class="bg-gray-900 text-gray-400 py-10 text-center">
+    <?php
+    if (isset($_SESSION['role'])) {
 
-© 2026 VIDYA. All rights reserved by Ashutosh Prajapati.
+        if ($_SESSION['role'] === 'admin') {
+            $url = 'admin_dash.php';
+        } elseif ($_SESSION['role'] === 'teacher') {
+            $url = 'teacher_dash.php';
+        } elseif ($_SESSION['role'] === 'student') {
+            $url = null;
+        } else {
+            $url = 'homepage.php';
+        }
 
-</footer>
+        if ($url): ?>
+
+            <div class="max-w-7xl mx-auto px-6 pb-10">
+
+                <a
+                    href="<?php echo $url; ?>"
+                    class="inline-block bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-black">
+
+                    Back to Dashboard
+
+                </a>
+
+            </div>
+
+    <?php endif;
+    } ?>
+
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-400 py-10 text-center">
+
+        © 2026 VIDYA. All rights reserved by Ashutosh Prajapati.
+
+    </footer>
 
 </body>
+
 </html>

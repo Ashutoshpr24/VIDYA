@@ -2,6 +2,7 @@
 include 'auth.php';
 protectPage(['admin']);
 include 'manage_teachers_process.php';
+include 'header.php';
 
 $teachers = fetchTeachers($conn);
 
@@ -10,6 +11,8 @@ if (isset($_GET['edit'])) {
     $id = intval($_GET['edit']);
     $editTeacher = fetchTeacherById($conn, $id);
 }
+
+$current = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
@@ -17,81 +20,85 @@ if (isset($_GET['edit'])) {
 <head>
 <meta charset="UTF-8">
 <title>Manage Teachers</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
 <body class="bg-gray-100">
 
 
-<!-- YOUR HEADER -->
-<header class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-    <!-- Logo -->
-    <a href="#" class="flex items-center">
-      <img src="css/images/logo vidya1.1.png" alt="VIDYA Logo" class="h-12 w-auto">
-      <span class="ml-2 text-xl font-bold text-emerald-600 hidden md:inline"></span>
-    </a>
+<!-- MAIN LAYOUT -->
+<div class="flex">
 
-    <!-- Nav links -->
-    <nav class="hidden md:flex gap-8 text-sm">
-      <a href="homepage.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        Home
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
 
-      <a href="browse_notes.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        Browse
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
+<!-- SIDEBAR -->
+<div class="w-64 bg-white shadow-md min-h-screen">
 
-      <a href="upload.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        Upload
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-
-      <a href="about.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        About
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-
-      <a href="contact.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800 transition">
-        Contact
-        <span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
-      </a>
-    </nav>
-
-    <!-- Buttons -->
-<div class="relative inline-block group">
-
-<button class="flex items-center focus:outline-none">
-<img src="css/images/user-icon.svg"
-alt="User"
-class="w-10 h-10 hover:scale-105 transition">
-</button>
-
-<div class="absolute right-0 top-full w-44 bg-white border rounded-lg shadow-lg hidden group-hover:block z-50">
-
-<a href="student_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
-Student Dashboard
-</a>
-
-<a href="teacher_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
-Teacher Dashboard
-</a>
-
-<a href="admin_dash.php" class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
-Admin Dashboard
-</a>
-
+<div class="p-6 font-bold text-lg border-b">
+<?php echo ($_SESSION['role'] === 'admin') ? 'Admin Panel' : 'Teacher Panel'; ?>
 </div>
 
+<nav class="flex flex-col p-4 space-y-2 text-sm">
+
+<!-- Dashboard -->
+<a href="<?php echo ($_SESSION['role'] === 'admin') ? 'admin_dash.php' : 'teacher_dash.php'; ?>"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'admin_dash.php' || $current_page == 'teacher_dash.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Dashboard
+</a>
+
+<!-- Manage Students -->
+<a href="manage_students.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_students.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Manage Students
+</a>
+
+<!-- Manage Teachers (ADMIN ONLY) -->
+<?php if($_SESSION['role'] === 'admin'): ?>
+<a href="manage_teachers.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_teachers.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Manage Teachers
+</a>
+<?php endif; ?>
+
+<!-- Approve Notes -->
+<a href="approve_notes.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'approve_notes.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Approve Notes
+</a>
+
+<!-- Manage Notes -->
+<a href="manage_notes.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_notes.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Manage Notes
+</a>
+
+<!-- Teacher Profile -->
+<?php if($_SESSION['role'] === 'teacher'): ?>
+<a href="teacher_profile.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'teacher_profile.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Profile
+</a>
+<?php endif; ?>
+
+<!-- Logout -->
+<a href="<?php echo ($_SESSION['role'] === 'admin') ? 'admin_logout.php' : 'logout.php'; ?>"
+class="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+Logout
+</a>
+
+</nav>
 </div>
-  </div>
-</header>
 
-
+<!-- PAGE CONTENT -->
+<div class="flex-1">
 
 <div class="max-w-7xl mx-auto px-6 py-10">
 
@@ -110,66 +117,42 @@ Edit Teacher (ID: <?php echo $editTeacher['id']; ?>)
 
 <form method="POST" action="manage_teachers_process.php">
 
-<input type="hidden" name="update_id"
-value="<?php echo $editTeacher['id']; ?>">
+<input type="hidden" name="update_id" value="<?php echo $editTeacher['id']; ?>">
 
 <div class="grid md:grid-cols-3 gap-4">
 
 <div>
-<label class="block text-sm font-medium text-gray-600 mb-1">
-Full Name
-</label>
-
-<input type="text"
-name="fullname"
+<label class="block text-sm font-medium text-gray-600 mb-1">Full Name</label>
+<input type="text" name="fullname"
 class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
-value="<?php echo htmlspecialchars($editTeacher['fullname']); ?>"
-required>
+value="<?php echo htmlspecialchars($editTeacher['fullname']); ?>" required>
 </div>
 
-
 <div>
-<label class="block text-sm font-medium text-gray-600 mb-1">
-Email
-</label>
-
-<input type="email"
-name="email"
+<label class="block text-sm font-medium text-gray-600 mb-1">Email</label>
+<input type="email" name="email"
 class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
-value="<?php echo htmlspecialchars($editTeacher['email']); ?>"
-required>
+value="<?php echo htmlspecialchars($editTeacher['email']); ?>" required>
 </div>
 
-
 <div>
-<label class="block text-sm font-medium text-gray-600 mb-1">
-Role
-</label>
+<label class="block text-sm font-medium text-gray-600 mb-1">Role</label>
 
 <select name="role"
-class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
-required>
+class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500" required>
 
-<option value="student"
-<?php if($editTeacher['role'] == 'student') echo 'selected'; ?>>
-Student
-</option>
-
-<option value="teacher"
-<?php if($editTeacher['role'] == 'teacher') echo 'selected'; ?>>
-Teacher
-</option>
+<option value="student" <?php if($editTeacher['role']=='student') echo 'selected'; ?>>Student</option>
+<option value="teacher" <?php if($editTeacher['role']=='teacher') echo 'selected'; ?>>Teacher</option>
 
 </select>
 </div>
 
 </div>
 
-
 <div class="mt-5 flex gap-3">
 
 <button type="submit"
-class="bg-emerald-600 text-white px-5 py-2 rounded-lg hover:bg-emerald-700 transition">
+class="bg-emerald-600 text-white px-5 py-2 rounded-lg hover:bg-emerald-700">
 Update Teacher
 </button>
 
@@ -193,7 +176,6 @@ Cancel
 <table class="w-full text-sm text-left">
 
 <thead class="bg-emerald-600 text-white">
-
 <tr>
 <th class="px-4 py-3">ID</th>
 <th class="px-4 py-3">Full Name</th>
@@ -202,7 +184,6 @@ Cancel
 <th class="px-4 py-3">Registered On</th>
 <th class="px-4 py-3 text-center">Actions</th>
 </tr>
-
 </thead>
 
 <tbody>
@@ -235,13 +216,13 @@ Cancel
 <td class="px-4 py-3 text-center flex justify-center gap-2">
 
 <a href="manage_teachers.php?edit=<?php echo $row['id']; ?>"
-class="bg-emerald-500 text-white px-3 py-1 rounded hover:bg-emerald-600 transition">
+class="bg-emerald-500 text-white px-3 py-1 rounded hover:bg-emerald-600">
 Edit
 </a>
 
 <a href="manage_teachers_process.php?delete=<?php echo $row['id']; ?>"
 onclick="return confirm('Are you sure you want to delete this teacher?');"
-class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">
+class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
 Delete
 </a>
 
@@ -265,32 +246,35 @@ No teachers found
 </table>
 
 </div>
-
-
 <?php
 if (isset($_SESSION['role'])) {
 
-if ($_SESSION['role'] === 'admin') {
-$url = 'admin_dash.php';
-} elseif ($_SESSION['role'] === 'teacher') {
-$url = 'teacher_dash.php';
-} elseif ($_SESSION['role'] === 'student') {
-$url = null;
-} else {
-$url = 'homepage.php';
-}
+    if ($_SESSION['role'] === 'admin') {
+        $url = 'admin_dash.php';
+    } elseif ($_SESSION['role'] === 'teacher') {
+        $url = 'teacher_dash.php';
+    } elseif ($_SESSION['role'] === 'student') {
+        $url = null;
+    } else {
+        $url = 'homepage.php';
+    }
 
-if ($url): ?>
+    if ($url): ?>
 
+<div class="mt-6">
 <a href="<?php echo $url; ?>"
-class="inline-block mt-6 bg-gray-800 text-white px-5 py-2 rounded-lg hover:bg-black">
+class="inline-block bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-black">
 Back to Dashboard
 </a>
+</div>
 
 <?php endif; } ?>
 
 </div>
+</div>
 
+</div>
 
 </body>
 </html>
+

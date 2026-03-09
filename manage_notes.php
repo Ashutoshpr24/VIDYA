@@ -1,7 +1,10 @@
-
 <?php
 include 'auth.php';
+protectPage(['admin','teacher']);
 include 'manage_notes_process.php';
+include 'header.php';
+
+$current = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
@@ -14,75 +17,86 @@ include 'manage_notes_process.php';
 <title>Manage Notes • VIDYA</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
 <body class="bg-gray-50 text-gray-800">
 
-<!-- HEADER -->
-<header class="bg-white shadow-sm">
-<div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-<a href="#">
-<img src="css/images/logo vidya1.1.png" class="h-12">
+
+<!-- MAIN LAYOUT -->
+<div class="flex">
+
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+
+<!-- SIDEBAR -->
+<div class="w-64 bg-white shadow-md min-h-screen">
+
+<div class="p-6 font-bold text-lg border-b">
+<?php echo ($_SESSION['role'] === 'admin') ? 'Admin Panel' : 'Teacher Panel'; ?>
+</div>
+
+<nav class="flex flex-col p-4 space-y-2 text-sm">
+
+<!-- Dashboard -->
+<a href="<?php echo ($_SESSION['role'] === 'admin') ? 'admin_dash.php' : 'teacher_dash.php'; ?>"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'admin_dash.php' || $current_page == 'teacher_dash.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Dashboard
 </a>
 
-<nav class="hidden md:flex gap-8 text-sm">
-
-<a href="homepage.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-Home
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+<!-- Manage Students -->
+<a href="manage_students.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_students.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Manage Students
 </a>
 
-<a href="browse_notes.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-Browse
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+<!-- Manage Teachers (ADMIN ONLY) -->
+<?php if($_SESSION['role'] === 'admin'): ?>
+<a href="manage_teachers.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_teachers.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Manage Teachers
+</a>
+<?php endif; ?>
+
+<!-- Approve Notes -->
+<a href="approve_notes.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'approve_notes.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Approve Notes
 </a>
 
-<a href="upload.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-Upload
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+<!-- Manage Notes -->
+<a href="manage_notes.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'manage_notes.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Manage Notes
 </a>
 
-<a href="about.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-About
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+<!-- Teacher Profile -->
+<?php if($_SESSION['role'] === 'teacher'): ?>
+<a href="teacher_profile.php"
+class="px-4 py-2 rounded-lg
+<?php echo ($current_page == 'teacher_profile.php') ? 'bg-emerald-600 text-white' : 'hover:bg-gray-100'; ?>">
+Profile
 </a>
+<?php endif; ?>
 
-<a href="contact.php" class="relative group px-1 py-1 text-gray-700 font-medium hover:text-green-800">
-Contact
-<span class="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-green-800 transition-all group-hover:w-full"></span>
+<!-- Logout -->
+<a href="<?php echo ($_SESSION['role'] === 'admin') ? 'admin_logout.php' : 'logout.php'; ?>"
+class="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+Logout
 </a>
 
 </nav>
-
-<div class="relative group">
-
-<img src="css/images/user-icon.svg" class="w-10 cursor-pointer">
-
-<div class="absolute right-0 hidden group-hover:block bg-white border rounded-lg shadow w-44">
-
-<a href="student_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">
-Student Dashboard
-</a>
-
-<a href="teacher_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">
-Teacher Dashboard
-</a>
-
-<a href="admin_dash.php" class="block px-4 py-2 hover:bg-emerald-600 hover:text-white">
-Admin Dashboard
-</a>
-
 </div>
 
-</div>
+<!-- PAGE CONTENT -->
+<div class="flex-1">
 
-</div>
-</header>
-
-
-<!-- PAGE -->
 <div class="max-w-7xl mx-auto px-6 py-10">
 
 <h2 class="text-3xl font-bold mb-6">Manage Notes</h2>
@@ -114,24 +128,18 @@ Admin Dashboard
 
 <td class="px-4 py-3"><?= $row['note_id'] ?></td>
 
-<td class="px-4 py-3">
-<?= htmlspecialchars($row['title']) ?>
-</td>
+<td class="px-4 py-3"><?= htmlspecialchars($row['title']) ?></td>
 
 <td class="px-4 py-3">
-
 <?= $row['fullname']
 ? htmlspecialchars($row['fullname'])
 : '<span class="text-gray-400 italic">Deleted User</span>' ?>
-
 </td>
 
 <td class="px-4 py-3">
-
 <?= $row['subject']
 ? htmlspecialchars($row['subject'])
 : '<span class="text-gray-400">N/A</span>' ?>
-
 </td>
 
 <td class="px-4 py-3">
@@ -203,44 +211,39 @@ No notes found
 </table>
 
 </div>
-
-
 <?php
 if (isset($_SESSION['role'])) {
 
-if ($_SESSION['role'] === 'admin') {
-$url = 'admin_dash.php';
-} elseif ($_SESSION['role'] === 'teacher') {
-$url = 'teacher_dash.php';
-} elseif ($_SESSION['role'] === 'student') {
-$url = null;
-} else {
-$url = 'homepage.php';
-}
+    if ($_SESSION['role'] === 'admin') {
+        $url = 'admin_dash.php';
+    } elseif ($_SESSION['role'] === 'teacher') {
+        $url = 'teacher_dash.php';
+    } elseif ($_SESSION['role'] === 'student') {
+        $url = null;
+    } else {
+        $url = 'homepage.php';
+    }
 
-if ($url): ?>
+    if ($url): ?>
 
 <div class="mt-6">
-
 <a href="<?php echo $url; ?>"
 class="inline-block bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-black">
-
 Back to Dashboard
-
 </a>
-
 </div>
 
 <?php endif; } ?>
+
+</div>
+</div>
 
 </div>
 
 
 <!-- FOOTER -->
 <footer class="bg-gray-900 text-gray-400 py-10 text-center mt-10">
-
 © 2026 VIDYA. All rights reserved by Ashutosh Prajapati.
-
 </footer>
 
 </body>

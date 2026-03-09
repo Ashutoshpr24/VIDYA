@@ -10,69 +10,83 @@ if (!$conn) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>College Notes Gallery</title>
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
 
-  <link rel="stylesheet" href="css/style1.css">
-  <style>
-    .nav-item.dropdown:hover .dropdown-menu {
-  display: block;
-  margin-top: 0;
-  margin-right: 5px;
-}
-    body {
-      font-family: 'Poppins', sans-serif;
-      padding-top: 70px; 
-    }
-   
-    .dropdown-menu {
-      right: -65px;
-      left: auto;
-    }   
+<header class="bg-white shadow-sm">
+<div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-  </style>
-</head>
-<body>
+<!-- Logo -->
+<a href="homepage.php" class="flex items-center">
+<img src="css/images/logo vidya1.1.png" alt="VIDYA Logo" class="h-12 w-auto">
+<span class="ml-2 text-xl font-bold text-emerald-600 hidden md:inline"></span>
+</a>
 
-  <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-      <a class="navbar-brand fs-3" href="homepage.php">
-        <img src="css/images/logoo.png" height="180px" width="300px" alt="Logo">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-              data-bs-target="#navbarNav" aria-controls="navbarNav" 
-              aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon bg-light"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto align-items-center">
-          <li class="nav-item"><a class="nav-link" href="homepage.php"><img src="css/images/home.png" height="40px" width="40px" alt=""></a></li>
-          <li class="nav-item"><a class="nav-link" href="browse_notes.php"><img src="css/images/browsenotes.png" height="52px" width="52px"></a></li>
-          <li class="nav-item"><a class="nav-link" href="upload.php"><img src="css/images/uploadnotes.png" height="40px" width="40px" alt=""></a></li> 
+<!-- Nav links -->
+<nav class="hidden md:flex gap-8 text-sm">
 
-          <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="css/images/circle-user.png" height="40px" width="40px" alt="">
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="student_dash.php">Student</a></li>
-            <li><a class="dropdown-item" href="teacher_dash.php">Teacher</a></li>
-            <li><a class="dropdown-item" href="admin_dash.php">Admin</a></li>
-          </ul>
-        </li>
-      
-        </a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+<a href="homepage.php"
+class="relative group px-1 py-1 <?php echo ($current_page=='homepage.php') ? 'text-green-800 font-semibold' : 'text-gray-700 font-medium hover:text-green-800'; ?> transition">
+Home
+<span class="absolute left-0 -bottom-0.5 <?php echo ($current_page=='homepage.php') ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-green-800 transition-all"></span>
+</a>
 
-  <main class="pt-5">
+<a href="browse_notes.php"
+class="relative group px-1 py-1 <?php echo ($current_page=='browse_notes.php') ? 'text-green-800 font-semibold' : 'text-gray-700 font-medium hover:text-green-800'; ?> transition">
+Browse
+<span class="absolute left-0 -bottom-0.5 <?php echo ($current_page=='browse_notes.php') ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-green-800 transition-all"></span>
+</a>
+
+<a href="upload.php"
+class="relative group px-1 py-1 <?php echo ($current_page=='upload.php') ? 'text-green-800 font-semibold' : 'text-gray-700 font-medium hover:text-green-800'; ?> transition">
+Upload
+<span class="absolute left-0 -bottom-0.5 <?php echo ($current_page=='upload.php') ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-green-800 transition-all"></span>
+</a>
+
+<a href="about.php"
+class="relative group px-1 py-1 <?php echo ($current_page=='about.php') ? 'text-green-800 font-semibold' : 'text-gray-700 font-medium hover:text-green-800'; ?> transition">
+About
+<span class="absolute left-0 -bottom-0.5 <?php echo ($current_page=='about.php') ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-green-800 transition-all"></span>
+</a>
+
+<a href="contact.php"
+class="relative group px-1 py-1 <?php echo ($current_page=='contact.php') ? 'text-green-800 font-semibold' : 'text-gray-700 font-medium hover:text-green-800'; ?> transition">
+Contact
+<span class="absolute left-0 -bottom-0.5 <?php echo ($current_page=='contact.php') ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-green-800 transition-all"></span>
+</a>
+
+</nav>
+
+<!-- User Dropdown -->
+<div class="relative inline-block group">
+
+<button class="flex items-center focus:outline-none">
+<img src="css/images/user-icon.svg"
+alt="User"
+class="w-10 h-10 hover:scale-105 transition">
+</button>
+
+<div class="absolute right-0 top-full w-44 bg-white border rounded-lg shadow-lg hidden group-hover:block z-50">
+
+<a href="student_dash.php"
+class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
+Student Dashboard
+</a>
+
+<a href="teacher_dash.php"
+class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
+Teacher Dashboard
+</a>
+
+<a href="admin_dash.php"
+class="block px-4 py-2 text-sm hover:bg-emerald-600 hover:text-white transition">
+Admin Dashboard
+</a>
+
+</div>
+
+</div>
+
+</div>
+</header>
