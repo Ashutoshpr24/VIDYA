@@ -44,7 +44,7 @@ box-shadow:0 25px 50px rgba(0,0,0,0.12);
 
 .left{
 flex:0.9;
-padding:45px 45px 50px 45px;
+padding:20px 45px 50px 45px;
 display:flex;
 flex-direction:column;
 justify-content:center;
@@ -62,6 +62,7 @@ margin-bottom:20px;
 .logo img{
 width:150px;
 height:auto;
+margin-left: -20PX;
 }
 
 /* heading */
